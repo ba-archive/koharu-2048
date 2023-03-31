@@ -1,7 +1,7 @@
 <template>
   <div class="gameApp">
     <div class="gameApp__afterLoading" v-if="!loading">
-      <BoardView />
+      <BoardView class="board" />
     </div>
   </div>
 </template>
@@ -36,5 +36,11 @@ onMounted(() => {
   align-items: center;
   font-family: "Clear Sans", sans-serif;
   font-size: 21px;
+}
+
+.board {
+  width: 80vmin;
+  max-width: 440px;
+  aspect-ratio: 1;
 }
 </style>

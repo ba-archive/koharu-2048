@@ -54,9 +54,9 @@ export default {
 }
 
 .tile {
-  width: 100px;
-  height: 100px;
-  margin: 5px;
+  width: calc(92% / 4);
+  height: calc(92% / 4);
+  margin: 1%;
   line-height: 90px;
   display: inline-block;
   font-size: 55px;

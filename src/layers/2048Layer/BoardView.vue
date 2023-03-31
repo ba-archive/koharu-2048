@@ -1,6 +1,6 @@
 <template>
   <div class="board" tabIndex="1">
-    <div v-for="(r_item, r_i) in board.cells" :key="r_i">
+    <div v-for="(r_item, r_i) in board.cells" :key="r_i" class="cells">
       <cell v-for="(c_item, c_i) in r_item" :key="c_i"></cell>
     </div>
     <tile-view v-for="(tile, i) in tiles" :tile="tile" :key="i"> </tile-view>
@@ -48,25 +48,30 @@ const tiles = computed(() => {
 });
 </script>
 
-<style>
+<style lang="scss">
 .board {
   order: 1;
-  width: 440px;
-  height: 440px;
-  padding: 5px;
+  padding: 1%;
   background-color: #baa;
   border-radius: 7px;
   outline: none;
   position: relative;
+  .cells {
+    height: 25%;
+  }
 }
 </style>
 
 <style lang="scss">
+@function calcPosition($count) {
+  @return 24% * $count + 1% * (floor($count/2) + 1);
+}
+
 @for $row from 0 through 3 {
   @for $column from 0 through 3 {
     .position_#{$row}_#{$column}:not(.isMoving) {
-      top: 110px * $row + 5px;
-      left: 110px * $column + 5px;
+      top: calcPosition($row);
+      left: calcPosition(($column));
     }
   }
 }
@@ -77,7 +82,7 @@ const tiles = computed(() => {
 
     @if $fromRow == $toRow {
       .#{$name} {
-        top: 110px * $toRow + 5px;
+        top: calcPosition($toRow);
       }
     } @else {
       .#{$name} {
@@ -88,10 +93,10 @@ const tiles = computed(() => {
 
       @keyframes #{$name} {
         from {
-          top: 110px * $fromRow + 5px;
+          top: calcPosition($fromRow);
         }
         to {
-          top: 110px * $toRow + 5px;
+          top: calcPosition(($toRow));
         }
       }
     }
@@ -104,7 +109,7 @@ const tiles = computed(() => {
 
     @if $fromColumn == $toColumn {
       .#{$name} {
-        left: 110px * $toColumn + 5px;
+        left: calcPosition($toColumn);
       }
     } @else {
       .#{$name} {
@@ -115,10 +120,10 @@ const tiles = computed(() => {
 
       @keyframes #{$name} {
         from {
-          left: 110px * $fromColumn + 5px;
+          left: calcPosition($fromColumn);
         }
         to {
-          left: 110px * $toColumn + 5px;
+          left: calcPosition($toColumn);
         }
       }
     }
