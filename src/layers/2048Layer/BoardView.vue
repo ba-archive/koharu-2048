@@ -8,49 +8,44 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import Cell from "./components/Cell.vue";
 import TileView from "./components/TileView.vue";
 import GameEndOverlay from "./components/GameEndOverlay.vue";
-import { Board } from "./board";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-export default {
-  setup() {
-    const board = ref(new Board());
-    const handleKeyDown = event => {
-      if (board.value.hasWon()) {
-        return;
-      }
-      if (event.keyCode >= 37 && event.keyCode <= 40) {
-        event.preventDefault();
-        var direction = event.keyCode - 37;
-        board.value.move(direction);
-      }
-    };
-    const onRestart = () => {
-      board.value = new Board();
-    };
-    onMounted(() => {
-      window.addEventListener("keydown", handleKeyDown);
-    });
-    onBeforeUnmount(() => {
-      window.removeEventListener("keydown", handleKeyDown);
-    });
-    const tiles = computed(() => {
-      return board.value.tiles.filter(tile => tile.value !== 0);
-    });
-    return {
-      board,
-      onRestart,
-      tiles,
-    };
-  },
-  components: {
-    Cell,
-    TileView,
-    GameEndOverlay,
-  },
+import { Board, MoveMap } from "./board";
+import { onMounted, onBeforeUnmount, ref, computed } from "vue";
+import eventBus from "@/event";
+import { Events } from "@/types/events";
+const board = ref(new Board());
+
+const handleKeyDown: (event: KeyboardEvent) => void = event => {
+  if (board.value.hasWon()) {
+    return;
+  }
+  if (event.keyCode >= 37 && event.keyCode <= 40) {
+    event.preventDefault();
+    var direction = event.keyCode - 37;
+    board.value.move(direction);
+  }
 };
+const onRestart = () => {
+  board.value = new Board();
+};
+
+function cellMove(direction: Events["move"]) {
+  board.value.move(MoveMap[direction]);
+}
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDown);
+  eventBus.on("move", cellMove);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+  eventBus.off("move", cellMove);
+});
+const tiles = computed(() => {
+  return board.value.tiles.filter(tile => tile.value != 0);
+});
 </script>
 
 <style>

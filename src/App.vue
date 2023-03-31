@@ -10,6 +10,11 @@
 import BoardView from "./layers/2048Layer/BoardView.vue";
 import init from ".";
 import { onMounted, ref } from "vue";
+import eventBus from "./event";
+
+if (import.meta.env.DEV) {
+  Reflect.set(window, "eventBus", eventBus);
+}
 
 const loading = ref(true);
 onMounted(() => {

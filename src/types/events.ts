@@ -1,3 +1,5 @@
+import { MoveMap } from "@/layers/2048Layer/board";
+
 //以接受事件的层组织事件
 export type Events = {
   //ui layer
@@ -12,6 +14,10 @@ export type Events = {
 
   //2048 layer
   gameStart: undefined;
+  /**
+   * 操作格子移动
+   */
+  move: keyof typeof MoveMap;
   /**
    * 小春帮你下一步
    */

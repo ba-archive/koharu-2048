@@ -1,3 +1,13 @@
+/**
+ * 方向对于的数字
+ */
+const MoveMap = {
+  left: 0,
+  up: 1,
+  right: 2,
+  down: 3,
+};
+
 var rotateLeft = function (matrix) {
   var rows = matrix.length;
   var columns = matrix[0].length;
@@ -196,4 +206,4 @@ Board.prototype.hasLost = function () {
   return !canMove;
 };
 
-export { Board };
+export { Board, MoveMap };
