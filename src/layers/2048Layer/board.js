@@ -1,5 +1,5 @@
 /**
- * 方向对于的数字
+ * 方向对应的数字
  */
 const MoveMap = {
   left: 0,
@@ -206,4 +206,4 @@ Board.prototype.hasLost = function () {
   return !canMove;
 };
 
-export { Board, MoveMap };
+export { Board, MoveMap, Tile };

@@ -13,7 +13,7 @@ import Cell from "./components/Cell.vue";
 import TileView from "./components/TileView.vue";
 import GameEndOverlay from "./components/GameEndOverlay.vue";
 import { Board, MoveMap } from "./board";
-import { onMounted, onBeforeUnmount, ref, computed } from "vue";
+import { onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
 import eventBus from "@/event";
 import { Events } from "@/types/events";
 const board = ref(new Board());
@@ -35,17 +35,32 @@ const onRestart = () => {
 function cellMove(direction: Events["move"]) {
   board.value.move(MoveMap[direction]);
 }
+function koharuNext() {
+  const directions = Object.values(MoveMap);
+  board.value.move(directions[Math.floor(Math.random() * directions.length)]);
+}
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
   eventBus.on("move", cellMove);
+  eventBus.on("koharuNext", koharuNext);
 });
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", handleKeyDown);
   eventBus.off("move", cellMove);
+  eventBus.off("koharuNext", koharuNext);
 });
 const tiles = computed(() => {
   return board.value.tiles.filter(tile => tile.value != 0);
 });
+
+watch(
+  () => board.value.hasWon(),
+  () => eventBus.emit("gameSucceed")
+);
+watch(
+  () => board.value.hasLost(),
+  () => eventBus.emit("gameFail")
+);
 </script>
 
 <style lang="scss">

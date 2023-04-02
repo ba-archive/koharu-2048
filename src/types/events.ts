@@ -24,8 +24,9 @@ export type Events = {
   koharuNext: undefined;
 
   //effect layer
-  effect256: undefined;
-  effect512: undefined;
-  effect2048: undefined;
+  numberEffect: {
+    value: number;
+    element: HTMLSpanElement;
+  };
   click: { x: number; y: number };
 };

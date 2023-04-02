@@ -14,6 +14,7 @@ import eventBus from "./event";
 
 if (import.meta.env.DEV) {
   Reflect.set(window, "eventBus", eventBus);
+  eventBus.on("*", (e, args) => console.log("events:", e, "args:", args));
 }
 
 const loading = ref(true);
