@@ -12,7 +12,7 @@
 import Cell from "./components/Cell.vue";
 import TileView from "./components/TileView.vue";
 import GameEndOverlay from "./components/GameEndOverlay.vue";
-import { Board, MoveMap } from "./board";
+import { Board, MoveMap, setDifficulty } from "./board";
 import { onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
 import eventBus from "@/event";
 import { Events } from "@/types/events";
@@ -39,15 +39,25 @@ function koharuNext() {
   const directions = Object.values(MoveMap);
   board.value.move(directions[Math.floor(Math.random() * directions.length)]);
 }
+function newGame(difficulty: undefined | number) {
+  if (difficulty) {
+    setDifficulty(difficulty);
+  }
+  board.value = new Board();
+}
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
   eventBus.on("move", cellMove);
   eventBus.on("koharuNext", koharuNext);
+  eventBus.on("gameStart", newGame);
+  eventBus.on("puranaNext", koharuNext);
 });
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", handleKeyDown);
   eventBus.off("move", cellMove);
   eventBus.off("koharuNext", koharuNext);
+  eventBus.off("gameStart", newGame);
+  eventBus.off("puranaNext", koharuNext);
 });
 const tiles = computed(() => {
   return board.value.tiles.filter(tile => tile.value != 0);
@@ -71,7 +81,7 @@ watch(
 );
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .board {
   order: 1;
   padding: 1%;
