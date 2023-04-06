@@ -55,11 +55,19 @@ const tiles = computed(() => {
 
 watch(
   () => board.value.hasWon(),
-  () => eventBus.emit("gameSucceed")
+  value => {
+    if (value) {
+      eventBus.emit("gameSucceed");
+    }
+  }
 );
 watch(
   () => board.value.hasLost(),
-  () => eventBus.emit("gameFail")
+  value => {
+    if (value) {
+      eventBus.emit("gameFail");
+    }
+  }
 );
 </script>
 
