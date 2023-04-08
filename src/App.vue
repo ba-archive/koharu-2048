@@ -38,20 +38,25 @@ onMounted(() => {
 body {
   background-image: url(./assets/testBg.jpg);
   background-size: cover;
+  background-position: center;
+  padding: 0;
+  margin: 0;
 }
 .gameApp {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-content: center;
+  justify-content: end;
   align-items: center;
   font-family: "Clear Sans", sans-serif;
   font-size: 21px;
+  height: 100vh;
+  width: 100%;
 }
 
 .board {
   width: 80vmin;
   max-width: 440px;
   aspect-ratio: 1;
+  margin-bottom: 3rem;
 }
 </style>
