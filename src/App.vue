@@ -35,11 +35,10 @@ onMounted(() => {
 </script>
 
 <style>
-@font-face {
-  font-family: "Clear Sans";
-  src: url("./assets/clear-sans.ttf") format("truetype");
+body {
+  background-image: url(./assets/testBg.jpg);
+  background-size: cover;
 }
-
 .gameApp {
   display: flex;
   flex-direction: column;

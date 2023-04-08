@@ -1,15 +1,36 @@
 <template>
-  <span :class="classes" ref="tileView">{{ tile.value }}</span>
+  <span :class="classes" ref="tileView"
+    ><img :src="imageUrl" :alt="tile.value" />
+    <div class="tipNumber">{{ tile.value }}</div>
+  </span>
 </template>
 
 <script lang="ts" setup>
 import eventBus from "@/event";
 import { toRefs, ref, computed, watch } from "vue";
 import { Tile } from "../board";
+import { useElementSize } from "@vueuse/core";
 const props = defineProps<{ tile: Tile }>();
 const { tile } = toRefs(props);
+const numberImages = import.meta.glob<{ default: string }>("../assets/*.png", {
+  eager: true,
+});
+
+const imageUrl = computed(() => {
+  const numberImage = Reflect.get(
+    numberImages,
+    `../assets/number_item_${tile.value.value}.png`
+  );
+  if (numberImage) {
+    return numberImage.default;
+  } else {
+    return "";
+  }
+});
 
 const tileView = ref<HTMLSpanElement | null>(null);
+const tipFontSize = computed(() => `${tileWidth.value * 0.3}px`);
+const { width: tileWidth } = useElementSize(tileView);
 watch(tile, () => {
   if ([256, 512, 1024, 2048].includes(tile.value.value)) {
     if (tileView.value) {
@@ -46,7 +67,9 @@ const classes = computed(() => {
 });
 </script>
 
-<style>
+<style lang="scss" scoped>
+@use "sass:list";
+@use "sass:math";
 .tile {
   user-select: none;
   cursor: default;
@@ -56,78 +79,37 @@ const classes = computed(() => {
   width: calc(92% / 4);
   height: calc(92% / 4);
   margin: 1%;
-  line-height: 90px;
-  display: inline-block;
-  font-size: 55px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
-  text-align: center;
-  vertical-align: middle;
   border-radius: 7px;
-  font-family: "Clear Sans";
   color: #766;
   background-color: #dcb;
+  position: relative;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .tipNumber {
+    font-size: v-bind(tipFontSize);
+    position: absolute;
+    right: 3%;
+    bottom: 0;
+  }
 }
 
-.tile0 {
-  background-color: #dcb;
-}
+$bgColors: #ecf4fe #d9e7fc #b2cffa #8cb8f7 #65a0f5 #65a0f5 #4c91f5 #3383f5
+  #c89baa #1b74f5;
+$textColors: #333333 #333333 #333333 #ffffff #ffffff #ffffff #ffffff #ffffff
+  #ffffff #ffffff;
 
-.tile2 {
-  background-color: #eee;
-}
-
-.tile4 {
-  background-color: #eec;
-}
-
-.tile8 {
-  color: #ffe;
-  background-color: #fb8;
-}
-
-.tile16 {
-  color: #ffe;
-  background-color: #f96;
-}
-
-.tile32 {
-  color: #ffe;
-  background-color: #f75;
-}
-
-.tile64 {
-  color: #ffe;
-  background-color: #f53;
-}
-
-.tile128 {
-  color: #ffe;
-  background-color: #ec7;
-  font-size: 45px;
-}
-
-.tile256 {
-  color: #ffe;
-  background-color: #ec6;
-  font-size: 45px;
-}
-
-.tile512 {
-  color: #ffe;
-  background-color: #ec5;
-  font-size: 45px;
-}
-
-.tile1024 {
-  color: #fff;
-  background-color: #ec3;
-  font-size: 35px;
-}
-
-.tile2048 {
-  color: #fff;
-  background-color: #ec2;
-  font-size: 35px;
+@for $i from 1 through 10 {
+  .tile#{math.pow(2,$i+1)} {
+    background-color: list.nth($bgColors, $i);
+    color: list.nth($textColors, $i);
+  }
 }
 
 .tile {

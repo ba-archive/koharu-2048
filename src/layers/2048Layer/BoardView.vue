@@ -1,8 +1,8 @@
 <template>
   <div class="board" tabIndex="1">
-    <div v-for="(r_item, r_i) in board.cells" :key="r_i" class="cells">
+    <!-- <div v-for="(r_item, r_i) in board.cells" :key="r_i" class="cells">
       <cell v-for="(c_item, c_i) in r_item" :key="c_i"></cell>
-    </div>
+    </div> -->
     <tile-view v-for="(tile, i) in tiles" :tile="tile" :key="i"> </tile-view>
     <game-end-overlay :board="board" :onrestart="onRestart"></game-end-overlay>
   </div>
@@ -85,19 +85,20 @@ watch(
 .board {
   order: 1;
   padding: 1%;
-  background-color: #baa;
-  border-radius: 7px;
   outline: none;
   position: relative;
-  .cells {
-    height: 25%;
-  }
+  /* Rectangle 2 */
+  background: rgba(80, 70, 80, 0.35);
+  box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(6px);
+  /* Note: backdrop-filter has minimal browser support */
+  border-radius: 12px;
 }
 </style>
 
 <style lang="scss">
 @function calcPosition($count) {
-  @return 24% * $count + 1% * (floor($count/2) + 1);
+  @return 24% * $count + 1% * (floor(calc($count/2)) + 1);
 }
 
 @for $row from 0 through 3 {

@@ -11,7 +11,7 @@ const MoveMap = {
 /**
  * 难度设置, 影响是生成的最低数字为难度系数*2
  */
-let difficulty = 1;
+let difficulty = 2;
 function setDifficulty(newDifficulty) {
   if (newDifficulty > 0) {
     difficulty = newDifficulty;
