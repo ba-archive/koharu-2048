@@ -84,7 +84,6 @@ watch(
 <style lang="scss" scoped>
 .board {
   order: 1;
-  padding: 1%;
   outline: none;
   position: relative;
   /* Rectangle 2 */
@@ -98,7 +97,7 @@ watch(
 
 <style lang="scss">
 @function calcPosition($count) {
-  @return 24% * $count + 1% * (floor(calc($count/2)) + 1);
+  @return 24.5% * $count + 2%;
 }
 
 @for $row from 0 through 3 {

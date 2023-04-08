@@ -76,9 +76,8 @@ const classes = computed(() => {
 }
 
 .tile {
-  width: calc(92% / 4);
-  height: calc(92% / 4);
-  margin: 1%;
+  width: calc(90% / 4);
+  height: calc(90% / 4);
   display: inline-flex;
   align-items: center;
   justify-content: center;
