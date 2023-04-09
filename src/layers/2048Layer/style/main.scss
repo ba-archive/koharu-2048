@@ -1,3 +1,5 @@
+@use "sass:list";
+@use "sass:math";
 @import "helpers";
 @import "fonts/clear-sans.css";
 
@@ -173,7 +175,6 @@ hr {
 // Game field mixin used to render CSS at different width
 @mixin game-field {
   .game-container {
-    margin-top: $game-container-margin-top;
     position: relative;
     padding: $grid-spacing;
 
@@ -186,7 +187,9 @@ hr {
     -ms-touch-action: none;
     touch-action: none;
 
-    background: $game-container-background;
+    background: rgba(80, 70, 80, 0.35);
+    box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(6px);
     border-radius: $tile-border-radius * 2;
     width: $field-width;
     height: $field-width;
@@ -295,7 +298,6 @@ hr {
     .tile-inner {
       width: ceil($tile-size);
       height: ceil($tile-size);
-      line-height: $tile-size + 10px;
     }
 
     // Build position classes
@@ -325,7 +327,11 @@ hr {
     font-weight: bold;
     z-index: 10;
 
-    font-size: 55px;
+    .tile-number {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
   }
 
   // Movement transition
@@ -362,60 +368,21 @@ hr {
     false true; // 2048
 
   // Build tile colors
-  @while $exponent <= $limit {
-    $power: pow($base, $exponent);
+  $bgColors: #ecf4fe #d9e7fc #b2cffa #8cb8f7 #65a0f5 #65a0f5 #4c91f5 #3383f5
+    #c89baa #1b74f5;
+  $textColors: #333333 #333333 #333333 #ffffff #ffffff #ffffff #ffffff #ffffff
+    #ffffff #ffffff;
 
-    &.tile-#{$power} .tile-inner {
-      // Calculate base background color
-      $gold-percent: ($exponent - 1) / ($limit - 1) * 100;
-      $mixed-background: mix($tile-gold-color, $tile-color, $gold-percent);
-
-      $nth-color: nth($special-colors, $exponent);
-
-      $special-background: nth($nth-color, 1);
-      $bright-color: nth($nth-color, 2);
-
-      @if $special-background {
-        $mixed-background: mix($special-background, $mixed-background, 55%);
-      }
-
-      @if $bright-color {
-        color: $bright-text-color;
-      }
-
-      // Set background
-      background: $mixed-background;
-
-      // Add glow
-      $glow-opacity: max($exponent - 4, 0) / ($limit - 4);
-
-      @if not $special-background {
-        box-shadow: 0
-            0
-            30px
-            10px
-            rgba($tile-gold-glow-color, $glow-opacity / 1.8),
-          inset 0 0 0 1px rgba(white, $glow-opacity / 3);
-      }
-
-      // Adjust font size for bigger numbers
-      @if $power >= 100 and $power < 1000 {
-        font-size: 45px;
-
-        // Media queries placed here to avoid carrying over the rest of the logic
-        @include smaller($mobile-threshold) {
-          font-size: 25px;
-        }
-      } @else if $power >= 1000 {
-        font-size: 35px;
-
-        @include smaller($mobile-threshold) {
-          font-size: 15px;
-        }
-      }
+  @for $i from 1 through 10 {
+    $currentNumber: math.pow(2, $i + 1);
+    &.tile-#{$currentNumber} .tile-inner {
+      background-color: list.nth($bgColors, $i);
+      color: list.nth($textColors, $i);
+      background-image: url(../assets/number_item_#{$currentNumber}.png);
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
     }
-
-    $exponent: $exponent + 1;
   }
 
   // Super tiles (above 2048)
