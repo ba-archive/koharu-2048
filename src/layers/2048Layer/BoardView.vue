@@ -1,165 +1,76 @@
 <template>
-  <div class="board" tabIndex="1">
-    <!-- <div v-for="(r_item, r_i) in board.cells" :key="r_i" class="cells">
-      <cell v-for="(c_item, c_i) in r_item" :key="c_i"></cell>
-    </div> -->
-    <tile-view v-for="(tile, i) in tiles" :tile="tile" :key="i"> </tile-view>
-    <game-end-overlay :board="board" :onrestart="onRestart"></game-end-overlay>
+  <div class="container">
+    <div class="heading">
+      <h1 class="title">2048</h1>
+      <div class="scores-container">
+        <div class="score-container">0</div>
+        <div class="best-container">0</div>
+      </div>
+    </div>
+
+    <div class="above-game">
+      <p class="game-intro">
+        Join the numbers and get to the <strong>2048 tile!</strong>
+      </p>
+      <a class="restart-button">New Game</a>
+    </div>
+
+    <div id="ai-container" class="ai-container">
+      <a class="start-ai-deep-button">Run AI (Deep)</a>
+      <a class="start-ai-fast-button">Run AI (Fast)</a>
+    </div>
+
+    <div class="game-container">
+      <div class="game-message">
+        <p></p>
+        <div class="lower">
+          <a class="keep-playing-button">Keep going</a>
+          <a class="retry-button">Try again</a>
+        </div>
+      </div>
+
+      <div class="grid-container">
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+      </div>
+
+      <div class="tile-container"></div>
+    </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import Cell from "./components/Cell.vue";
-import TileView from "./components/TileView.vue";
-import GameEndOverlay from "./components/GameEndOverlay.vue";
-import { Board, MoveMap, setDifficulty } from "./board";
-import { onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
-import eventBus from "@/event";
-import { Events } from "@/types/events";
-const board = ref(new Board());
+<script setup lang="ts">
+import { onMounted } from "vue";
+import GameManager from "./js/game_manager";
+import KeyboardInputManager from "./js/keyboard_input_manager";
+import HTMLActuator from "./js/html_actuator";
+import LocalStorageManager from "./js/local_storage_manager";
 
-const handleKeyDown: (event: KeyboardEvent) => void = event => {
-  if (board.value.hasWon()) {
-    return;
-  }
-  if (event.keyCode >= 37 && event.keyCode <= 40) {
-    event.preventDefault();
-    var direction = event.keyCode - 37;
-    board.value.move(direction);
-  }
-};
-const onRestart = () => {
-  board.value = new Board();
-};
-
-function cellMove(direction: Events["move"]) {
-  board.value.move(MoveMap[direction]);
-}
-function koharuNext() {
-  const directions = Object.values(MoveMap);
-  board.value.move(directions[Math.floor(Math.random() * directions.length)]);
-}
-function newGame(difficulty: undefined | number) {
-  if (difficulty) {
-    setDifficulty(difficulty);
-  }
-  board.value = new Board();
-}
 onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
-  eventBus.on("move", cellMove);
-  eventBus.on("koharuNext", koharuNext);
-  eventBus.on("gameStart", newGame);
-  eventBus.on("puranaNext", koharuNext);
+  new GameManager(4, KeyboardInputManager, HTMLActuator, LocalStorageManager);
 });
-onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeyDown);
-  eventBus.off("move", cellMove);
-  eventBus.off("koharuNext", koharuNext);
-  eventBus.off("gameStart", newGame);
-  eventBus.off("puranaNext", koharuNext);
-});
-const tiles = computed(() => {
-  return board.value.tiles.filter(tile => tile.value != 0);
-});
-
-watch(
-  () => board.value.hasWon(),
-  value => {
-    if (value) {
-      eventBus.emit("gameSucceed");
-    }
-  }
-);
-watch(
-  () => board.value.hasLost(),
-  value => {
-    if (value) {
-      eventBus.emit("gameFail");
-    }
-  }
-);
 </script>
 
-<style lang="scss" scoped>
-.board {
-  order: 1;
-  outline: none;
-  position: relative;
-  /* Rectangle 2 */
-  background: rgba(80, 70, 80, 0.35);
-  box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.42);
-  backdrop-filter: blur(6px);
-  /* Note: backdrop-filter has minimal browser support */
-  border-radius: 12px;
-}
-</style>
-
-<style lang="scss">
-@function calcPosition($count) {
-  @return 24.5% * $count + 2%;
-}
-
-@for $row from 0 through 3 {
-  @for $column from 0 through 3 {
-    .position_#{$row}_#{$column}:not(.isMoving) {
-      top: calcPosition($row);
-      left: calcPosition(($column));
-    }
-  }
-}
-
-@for $fromRow from 0 through 3 {
-  @for $toRow from 0 through 3 {
-    $name: row_from_#{$fromRow}_to_#{$toRow};
-
-    @if $fromRow == $toRow {
-      .#{$name} {
-        top: calcPosition($toRow);
-      }
-    } @else {
-      .#{$name} {
-        animation-duration: 0.2s;
-        animation-name: $name;
-        animation-fill-mode: forwards;
-      }
-
-      @keyframes #{$name} {
-        from {
-          top: calcPosition($fromRow);
-        }
-        to {
-          top: calcPosition(($toRow));
-        }
-      }
-    }
-  }
-}
-
-@for $fromColumn from 0 through 3 {
-  @for $toColumn from 0 through 3 {
-    $name: column_from_#{$fromColumn}_to_#{$toColumn};
-
-    @if $fromColumn == $toColumn {
-      .#{$name} {
-        left: calcPosition($toColumn);
-      }
-    } @else {
-      .#{$name} {
-        animation-duration: 0.2s;
-        animation-name: $name;
-        animation-fill-mode: forwards;
-      }
-
-      @keyframes #{$name} {
-        from {
-          left: calcPosition($fromColumn);
-        }
-        to {
-          left: calcPosition($toColumn);
-        }
-      }
-    }
-  }
-}
-</style>
+<style src="./style/main.css"></style>

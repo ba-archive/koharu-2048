@@ -1,3 +1,7 @@
+import Grid from "./grid";
+import Tile from "./tile";
+import { bestMove } from "./expectimax";
+
 function GameManager(size, InputManager, Actuator, StorageManager) {
   this.size = size; // Size of the grid
   this.inputManager = new InputManager();

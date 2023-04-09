@@ -49,14 +49,8 @@ body {
   align-items: center;
   font-family: "Clear Sans", sans-serif;
   font-size: 21px;
-  height: 100vh;
-  width: 100%;
 }
 
 .board {
-  width: 80vmin;
-  max-width: 440px;
-  aspect-ratio: 1;
-  margin-bottom: 3rem;
 }
 </style>
