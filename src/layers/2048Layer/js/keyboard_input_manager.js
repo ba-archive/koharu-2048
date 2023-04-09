@@ -24,15 +24,15 @@ KeyboardInputManager.prototype.listen = function () {
   // Respond to button presses
   this.bindButtonPress(".retry-button", this.restart);
   this.bindButtonPress(".restart-button", this.restart);
-    this.bindButtonPress(".start-ai-fast-button", this.startAIFast);
-    this.bindButtonPress(".start-ai-deep-button", this.startAIDeep);
+  this.bindButtonPress(".start-ai-fast-button", this.startAIFast);
+  this.bindButtonPress(".start-ai-deep-button", this.startAIDeep);
   this.bindButtonPress(".keep-playing-button", this.keepPlaying);
 };
 
 KeyboardInputManager.prototype.restart = function (event) {
   event.preventDefault();
-    document.getElementById("ai-container").style.visibility = 'visible';
-    document.getElementById("ai-container").style.display = 'block';
+  document.getElementById("ai-container").style.visibility = "visible";
+  document.getElementById("ai-container").style.display = "block";
   this.emit("restart");
 };
 
@@ -42,17 +42,17 @@ KeyboardInputManager.prototype.keepPlaying = function (event) {
 };
 
 KeyboardInputManager.prototype.startAIFast = function (event) {
-    event.preventDefault();
-    document.getElementById("ai-container").style.visibility = 'hidden';
-    document.getElementById("ai-container").style.display = 'none';
-    this.emit("startAIFast");
+  event.preventDefault();
+  document.getElementById("ai-container").style.visibility = "hidden";
+  document.getElementById("ai-container").style.display = "none";
+  this.emit("startAIFast");
 };
 
 KeyboardInputManager.prototype.startAIDeep = function (event) {
-    event.preventDefault();
-    document.getElementById("ai-container").style.visibility = 'hidden';
-    document.getElementById("ai-container").style.display = 'none';
-    this.emit("startAIDeep");
+  event.preventDefault();
+  document.getElementById("ai-container").style.visibility = "hidden";
+  document.getElementById("ai-container").style.display = "none";
+  this.emit("startAIDeep");
 };
 
 KeyboardInputManager.prototype.bindButtonPress = function (selector, fn) {
@@ -60,3 +60,5 @@ KeyboardInputManager.prototype.bindButtonPress = function (selector, fn) {
   button.addEventListener("click", fn.bind(this));
   button.addEventListener(this.eventTouchend, fn.bind(this));
 };
+
+export default KeyboardInputManager;
