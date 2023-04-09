@@ -2,11 +2,12 @@ import Grid from "./grid";
 import Tile from "./tile";
 import { bestMove } from "./expectimax";
 
-function GameManager(size, Actuator, StorageManager) {
+function GameManager(size, Actuator, StorageManager, difficulty) {
   this.size = size; // Size of the grid
   this.storageManager = new StorageManager();
   this.actuator = new Actuator();
   this.botActive = false;
+  this.difficulty = difficulty;
 
   this.startTiles = 2;
 
@@ -109,7 +110,7 @@ GameManager.prototype.addStartTiles = function () {
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
   if (this.grid.cellsAvailable()) {
-    var value = Math.random() < 0.9 ? 2 : 4;
+    var value = Math.random() < 0.9 ? 2 * this.difficulty : 4 * this.difficulty;
     var tile = new Tile(this.grid.randomAvailableCell(), value);
 
     this.grid.insertTile(tile);

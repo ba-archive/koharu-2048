@@ -6,8 +6,9 @@
 $field-width: 500px;
 $grid-spacing: 15px;
 $grid-row-cells: 4;
-$tile-size: ($field-width - $grid-spacing * ($grid-row-cells + 1)) /
-  $grid-row-cells;
+$tile-size: calc(
+  ($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells
+);
 $tile-border-radius: 3px;
 
 $mobile-threshold: $field-width + 20px;
@@ -461,8 +462,9 @@ hr {
   $field-width: 280px;
   $grid-spacing: 10px;
   $grid-row-cells: 4;
-  $tile-size: ($field-width - $grid-spacing * ($grid-row-cells + 1)) /
-    $grid-row-cells;
+  $tile-size: calc(
+    ($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells
+  );
   $tile-border-radius: 3px;
   $game-container-margin-top: 17px;
 

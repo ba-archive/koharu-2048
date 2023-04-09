@@ -14,8 +14,13 @@ import LocalStorageManager from "./js/local_storage_manager";
 import eventBus from "@/event";
 
 onMounted(() => {
-  const gameManager = new GameManager(4, HTMLActuator, LocalStorageManager);
-  eventBus.on("gameStart", () => gameManager.restart());
+  const gameManager = new GameManager(4, HTMLActuator, LocalStorageManager, 2);
+  eventBus.on("gameStart", e => {
+    if (e) {
+      gameManager.difficulty = e;
+    }
+    gameManager.restart();
+  });
   eventBus.on("planaNext", () => gameManager.startAIFast());
   eventBus.on("move", e => {
     const MoveMap = {
