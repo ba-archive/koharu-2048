@@ -181,9 +181,7 @@ hr {
     -webkit-touch-callout: none;
     -ms-touch-callout: none;
 
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    user-select: none;
 
     -ms-touch-action: none;
     touch-action: none;
