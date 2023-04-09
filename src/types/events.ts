@@ -35,7 +35,7 @@ export type Events = {
   /**
    * 普拉娜帮你下一步
    */
-  puranaNext: undefined;
+  planaNext: undefined;
 
   //effect layer
   numberEffect: {

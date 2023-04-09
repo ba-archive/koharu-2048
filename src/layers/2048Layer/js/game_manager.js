@@ -2,20 +2,13 @@ import Grid from "./grid";
 import Tile from "./tile";
 import { bestMove } from "./expectimax";
 
-function GameManager(size, InputManager, Actuator, StorageManager) {
+function GameManager(size, Actuator, StorageManager) {
   this.size = size; // Size of the grid
-  this.inputManager = new InputManager();
   this.storageManager = new StorageManager();
   this.actuator = new Actuator();
   this.botActive = false;
 
   this.startTiles = 2;
-
-  this.inputManager.on("move", this.move.bind(this));
-  this.inputManager.on("restart", this.restart.bind(this));
-  this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
-  this.inputManager.on("startAIFast", this.startAIFast.bind(this));
-  this.inputManager.on("startAIDeep", this.startAIDeep.bind(this));
 
   this.setup();
 }
@@ -23,14 +16,12 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
 // Restart the game
 GameManager.prototype.restart = function () {
   this.storageManager.clearGameState();
-  this.actuator.continueGame(); // Clear the game won/lost message
   this.setup();
 };
 
 // Keep playing after winning (allows going over 2048)
 GameManager.prototype.keepPlaying = function () {
   this.keepPlaying = true;
-  this.actuator.continueGame(); // Clear the game won/lost message
 };
 
 GameManager.prototype.startAIFast = function () {
