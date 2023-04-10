@@ -1,7 +1,11 @@
 @use "sass:list";
 @use "sass:math";
 @import "helpers";
-@import "fonts/clear-sans.css";
+
+@font-face {
+  font-family: "Clear Sans";
+  src: url(../assets/JetBrainsMono-ExtraBold.woff2) format("woff2");
+}
 
 $field-width: 400px;
 $grid-spacing: 15px;
