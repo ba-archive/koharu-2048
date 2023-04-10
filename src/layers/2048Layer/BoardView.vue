@@ -20,9 +20,11 @@ const MoveMap = {
 };
 
 let gameManager: GameManager;
+const difficultyKey = "difficulty";
 function gameStart(difficulty: number | undefined) {
   if (difficulty) {
     gameManager.difficulty = difficulty;
+    localStorage.setItem(difficultyKey, difficulty.toString());
   }
   gameManager.restart();
 }
@@ -39,7 +41,14 @@ function move(direction: keyof typeof MoveMap) {
   gameManager.move(MoveMap[direction]);
 }
 onMounted(() => {
-  gameManager = new GameManager(4, HTMLActuator, LocalStorageManager, 2);
+  const difficultyCache = localStorage.getItem(difficultyKey);
+  const difficulty = difficultyCache ? Number(difficultyCache) : 2;
+  gameManager = new GameManager(
+    4,
+    HTMLActuator,
+    LocalStorageManager,
+    difficulty
+  );
   eventBus.on("gameStart", gameStart);
   eventBus.on("planaNext", planaNext);
   eventBus.on("koharuNext", koharuNext);
