@@ -1,4 +1,3 @@
-import { MoveMap } from "@/layers/2048Layer/board";
 import CompleteCallback = PIXI.sound.CompleteCallback;
 import PlayOptions = PIXI.sound.PlayOptions;
 
@@ -27,7 +26,7 @@ export type Events = {
   /**
    * 操作格子移动
    */
-  move: keyof typeof MoveMap;
+  move: "up" | "down" | "right" | "left";
   /**
    * 小春帮你下一步
    */
