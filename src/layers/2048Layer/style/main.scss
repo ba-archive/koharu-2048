@@ -3,7 +3,7 @@
 @import "helpers";
 @import "fonts/clear-sans.css";
 
-$field-width: 500px;
+$field-width: 400px;
 $grid-spacing: 15px;
 $grid-row-cells: 4;
 $tile-size: calc(
@@ -332,6 +332,7 @@ hr {
       position: absolute;
       right: 0;
       bottom: 0;
+      font-size: 0.2 * $tile-size;
     }
   }
 
@@ -370,7 +371,7 @@ hr {
 
   // Build tile colors
   $bgColors: #ecf4fe #d9e7fc #b2cffa #8cb8f7 #65a0f5 #65a0f5 #4c91f5 #3383f5
-    #c89baa #1b74f5;
+    #1b74f5 #c89baa;
   $textColors: #333333 #333333 #333333 #ffffff #ffffff #ffffff #ffffff #ffffff
     #ffffff #ffffff;
 
