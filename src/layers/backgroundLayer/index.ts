@@ -159,7 +159,7 @@ export function useApplication() {
   return app;
 }
 
-function isMobile() {
+export function isMobile() {
   let isMobile = false;
   if ("maxTouchPoints" in navigator) {
     isMobile = navigator.maxTouchPoints > 0;
