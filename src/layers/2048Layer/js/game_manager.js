@@ -1,6 +1,7 @@
 import Grid from "./grid";
 import Tile from "./tile";
 import { bestMove } from "./expectimax";
+import eventBus from "@/event";
 
 function GameManager(size, Actuator, StorageManager, difficulty) {
   this.size = size; // Size of the grid
@@ -179,6 +180,11 @@ GameManager.prototype.move = function (direction) {
   var vector = this.getVector(direction);
   var traversals = this.buildTraversals(vector);
   var moved = false;
+  /**
+   * whether to send number effect
+   */
+  var numberEffect = 0;
+  var numberEffectElementSelector = "";
 
   // Save the current tile positions and remove merger information
   this.prepareTiles();
@@ -207,8 +213,16 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 
-          // The mighty 2048 tile
-          //if (merged.value === 2048) self.won = true;
+          //send number event
+          if ([256, 512, 1024, 2048].includes(merged.value)) {
+            numberEffect = merged.value;
+            numberEffectElementSelector = `.tile-position-${merged.x + 1}-${
+              merged.y + 1
+            }`;
+          }
+          if (merged.value === 2048)
+            // The mighty 2048 tile
+            self.won = true;
         } else {
           self.moveTile(tile, positions.farthest);
         }
@@ -228,6 +242,15 @@ GameManager.prototype.move = function (direction) {
     }
 
     this.actuate();
+
+    if (numberEffect) {
+      setTimeout(() => {
+        eventBus.emit("numberEffect", {
+          value: numberEffect,
+          element: document.querySelector(numberEffectElementSelector),
+        });
+      }, 300);
+    }
   }
 };
 

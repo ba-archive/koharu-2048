@@ -40,7 +40,7 @@ export type Events = {
   //effect layer
   numberEffect: {
     value: number;
-    element: HTMLSpanElement;
+    element: HTMLDivElement;
   };
   click: { x: number; y: number };
   /**

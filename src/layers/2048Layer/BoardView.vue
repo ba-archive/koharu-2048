@@ -21,7 +21,11 @@ onMounted(() => {
     }
     gameManager.restart();
   });
-  eventBus.on("planaNext", () => gameManager.startAIFast());
+  eventBus.on("planaNext", () => {
+    if (!gameManager.isGameTerminated()) {
+      gameManager.botMove(2);
+    }
+  });
   eventBus.on("move", e => {
     const MoveMap = {
       up: 0,
