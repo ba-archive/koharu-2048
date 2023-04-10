@@ -77,7 +77,7 @@ HTMLActuator.prototype.addTile = function (tile) {
     //send number event
     if ([256, 512, 1024, 2048].includes(tile.value)) {
       eventBus.emit("numberEffect", {
-        value: tile.value.value,
+        value: tile.value,
         element: wrapper,
       });
     }
