@@ -74,6 +74,13 @@ HTMLActuator.prototype.addTile = function (tile) {
     tile.mergedFrom.forEach(function (merged) {
       self.addTile(merged);
     });
+    //send number event
+    if ([256, 512, 1024, 2048].includes(tile.value)) {
+      eventBus.emit("numberEffect", {
+        value: tile.value.value,
+        element: wrapper,
+      });
+    }
   } else {
     classes.push("tile-new");
     this.applyClasses(wrapper, classes);

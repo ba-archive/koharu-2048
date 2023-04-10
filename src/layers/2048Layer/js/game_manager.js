@@ -180,11 +180,6 @@ GameManager.prototype.move = function (direction) {
   var vector = this.getVector(direction);
   var traversals = this.buildTraversals(vector);
   var moved = false;
-  /**
-   * whether to send number effect
-   */
-  var numberEffect = 0;
-  var numberEffectElementSelector = "";
 
   // Save the current tile positions and remove merger information
   this.prepareTiles();
@@ -213,13 +208,6 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 
-          //send number event
-          if ([256, 512, 1024, 2048].includes(merged.value)) {
-            numberEffect = merged.value;
-            numberEffectElementSelector = `.tile-position-${merged.x + 1}-${
-              merged.y + 1
-            }`;
-          }
           if (merged.value === 2048)
             // The mighty 2048 tile
             self.won = true;
@@ -242,15 +230,6 @@ GameManager.prototype.move = function (direction) {
     }
 
     this.actuate();
-
-    if (numberEffect) {
-      setTimeout(() => {
-        eventBus.emit("numberEffect", {
-          value: numberEffect,
-          element: document.querySelector(numberEffectElementSelector),
-        });
-      }, 300);
-    }
   }
 };
 

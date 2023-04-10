@@ -45,12 +45,9 @@ body {
 .gameApp {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   font-family: "Clear Sans", sans-serif;
   font-size: 21px;
-}
-
-.board {
 }
 </style>
