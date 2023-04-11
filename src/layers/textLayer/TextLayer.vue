@@ -15,12 +15,23 @@
     >
       <div class="bubble">这是一个气泡</div>
     </div>
+    <!--    <Teleport to="#app">-->
+    <BaDialog v-model:show="showInfo" title="提示">
+      <div class="ba-dialog-content">这是一些提示</div>
+      <div class="ba-dialog-button-group">
+        <BaButton class="polylight">取消</BaButton>
+        <BaButton class="polylight">确定</BaButton>
+      </div>
+    </BaDialog>
+    <!--    </Teleport>-->
   </div>
 </template>
 
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from "vue";
 import { isMobile } from "@/layers/backgroundLayer";
+import BaDialog from "@/layers/textLayer/BaDialog.vue";
+import BaButton from "@/layers/textLayer/BaButton.vue";
 
 const dialogMarginRight = 10;
 const dialogMarginLeft = 10;
@@ -30,6 +41,7 @@ const playerRank = ref(514);
 const dialogMaxWidth = ref(999);
 const dialogOffsetY = ref(100);
 const DialogRef = ref<HTMLElement>();
+const showInfo = ref(true);
 function relocationDialog(width?: number) {
   const gameBoard = document.querySelector(
     ".gameApp__afterLoading"
@@ -131,5 +143,18 @@ onMounted(() => {
       border-color: transparent $color transparent transparent;
     }
   }
+}
+.ba-dialog-content {
+  flex: 1;
+  border: solid #d1d7dc 2px;
+  border-radius: 0.25em;
+  overflow-y: auto;
+  padding: 0.3125em 0.4375em;
+  background-color: #f0f0f0;
+  font-size: 1.2em;
+}
+.ba-dialog-button-group {
+  margin-top: 1em;
+  text-align: center;
 }
 </style>
