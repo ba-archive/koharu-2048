@@ -29,33 +29,6 @@ $game-container-background: #bbada0;
 
 $transition-speed: 100ms;
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-
-  background: #faf8ef;
-  color: $text-color;
-  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-  font-size: 18px;
-}
-
-body {
-  margin: 80px 0;
-}
-
-.heading {
-  @include clearfix;
-}
-
-h1.title {
-  font-size: 80px;
-  font-weight: bold;
-  margin: 0;
-  display: block;
-  float: left;
-}
-
 @include keyframes(move-up) {
   0% {
     top: 25px;
@@ -68,91 +41,8 @@ h1.title {
   }
 }
 
-.scores-container {
-  float: right;
-  text-align: right;
-}
-
-.score-container,
-.best-container {
-  $height: 25px;
-
-  position: relative;
-  display: inline-block;
-  background: $game-container-background;
-  padding: 15px 25px;
-  font-size: $height;
-  height: $height;
-  line-height: $height + 22px;
-  font-weight: bold;
-  border-radius: 3px;
-  color: white;
-  margin-top: 8px;
-  text-align: center;
-
-  &:after {
-    position: absolute;
-    width: 100%;
-    top: 10px;
-    left: 0;
-    text-transform: uppercase;
-    font-size: 13px;
-    line-height: 13px;
-    text-align: center;
-    color: $tile-color;
-  }
-
-  .score-addition {
-    position: absolute;
-    right: 30px;
-    color: red;
-    font-size: $height;
-    line-height: $height;
-    font-weight: bold;
-    color: rgba($text-color, 0.9);
-    z-index: 100;
-    @include animation(move-up 600ms ease-in);
-    @include animation-fill-mode(both);
-  }
-}
-
-.score-container:after {
-  content: "Score";
-}
-
-.best-container:after {
-  content: "Best";
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: 10px;
-  line-height: 1.65;
-}
-
-a {
-  color: $text-color;
-  font-weight: bold;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-strong {
-  &.important {
-    text-transform: uppercase;
-  }
-}
-
-hr {
-  border: none;
-  border-bottom: 1px solid lighten($text-color, 40%);
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
-
-.container {
+.container-main {
   width: $field-width;
-  margin: 0 auto;
 }
 
 @include keyframes(fade-in) {
@@ -477,51 +367,9 @@ hr {
   $tile-border-radius: 3px;
   $game-container-margin-top: 17px;
 
-  html,
-  body {
-    font-size: 15px;
-  }
-
-  body {
-    margin: 20px 0;
-    padding: 0 20px;
-  }
-
-  h1.title {
-    font-size: 27px;
-    margin-top: 15px;
-  }
-
-  .container {
+  .container-main {
     width: $field-width;
     margin: 0 auto;
-  }
-
-  .score-container,
-  .best-container {
-    margin-top: 0;
-    padding: 15px 10px;
-    min-width: 40px;
-  }
-
-  .heading {
-    margin-bottom: 10px;
-  }
-
-  // Show intro and restart button side by side
-  .game-intro {
-    width: 55%;
-    display: block;
-    box-sizing: border-box;
-    line-height: 1.65;
-  }
-
-  .restart-button {
-    width: 42%;
-    padding: 0;
-    display: block;
-    box-sizing: border-box;
-    margin-top: 2px;
   }
 
   // Render the game field at the right width
@@ -530,18 +378,5 @@ hr {
   // Rest of the font-size adjustments in the tile class
   .tile .tile-inner {
     font-size: 35px;
-  }
-
-  .game-message {
-    p {
-      font-size: 30px !important;
-      height: 30px !important;
-      line-height: 30px !important;
-      margin-top: 90px !important;
-    }
-
-    .lower {
-      margin-top: 30px !important;
-    }
   }
 }

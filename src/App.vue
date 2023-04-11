@@ -2,7 +2,7 @@
   <div class="gameApp">
     <TopEffect :height="playerHeight" :width="playerWidth" />
     <div class="gameApp__afterLoading" v-if="!loading">
-      <BoardView class="board" />
+      <BoardView />
     </div>
   </div>
   <TextLayer />
@@ -35,16 +35,27 @@ onMounted(() => {
 </script>
 
 <style>
-body {
-  padding: 0;
-  margin: 0;
-}
 .gameApp {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+  align-content: center;
   align-items: center;
   font-family: "Clear Sans", sans-serif;
   font-size: 21px;
+}
+
+.board {
+  width: 80vmin;
+  max-width: 440px;
+  aspect-ratio: 1;
+}
+
+.gameApp__afterLoading {
+  display: flex;
+  height: calc(100vh - 1rem);
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
 }
 </style>

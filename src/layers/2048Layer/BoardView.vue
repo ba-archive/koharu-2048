@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-main">
     <div class="game-container">
       <div class="tile-container"></div>
     </div>
