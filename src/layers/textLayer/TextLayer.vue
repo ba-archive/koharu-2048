@@ -15,16 +15,14 @@
     >
       <div class="bubble">这是一个气泡</div>
     </div>
-    <!--    <Teleport to="#app">-->
-    <BaDialog v-model:show="showInfo" title="提示">
-      <div class="ba-dialog-content">这是一些提示</div>
-      <div class="ba-dialog-button-group">
-        <BaButton class="polylight">取消</BaButton>
-        <BaButton class="polylight">确定</BaButton>
-      </div>
-    </BaDialog>
-    <!--    </Teleport>-->
   </div>
+  <BaDialog v-model:show="showInfo" title="提示">
+    <div class="ba-dialog-content">这是一些提示</div>
+    <div class="ba-dialog-button-group">
+      <BaButton class="polylight">取消</BaButton>
+      <BaButton class="polylight">确定</BaButton>
+    </div>
+  </BaDialog>
 </template>
 
 <script setup lang="ts">
@@ -42,6 +40,7 @@ const dialogMaxWidth = ref(999);
 const dialogOffsetY = ref(100);
 const DialogRef = ref<HTMLElement>();
 const showInfo = ref(true);
+
 function relocationDialog(width?: number) {
   const gameBoard = document.querySelector(
     ".gameApp__afterLoading"
@@ -91,6 +90,7 @@ function relocationDialog(width?: number) {
     }
   });
 }
+
 onMounted(() => {
   relocationDialog();
 });
@@ -104,11 +104,13 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   z-index: -1;
+
   .player-info {
     left: 0;
     top: 0;
   }
 }
+
 .dialog {
   --max-width: 999;
   --offset-y: 100;
@@ -117,6 +119,7 @@ onMounted(() => {
   top: calc(var(--offset-y) * 1px);
   left: calc(var(--offset-x) * 1px + 50%);
   z-index: -1;
+
   .bubble {
     $color: rgba(255, 255, 255, 0.8);
     position: relative;
@@ -144,6 +147,7 @@ onMounted(() => {
     }
   }
 }
+
 .ba-dialog-content {
   flex: 1;
   border: solid #d1d7dc 2px;
@@ -153,6 +157,7 @@ onMounted(() => {
   background-color: #f0f0f0;
   font-size: 1.2em;
 }
+
 .ba-dialog-button-group {
   margin-top: 1em;
   text-align: center;

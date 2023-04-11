@@ -80,7 +80,7 @@ watch(
   width: 100%;
   height: 100%;
   background: rgba(63, 63, 63, 0.4);
-  z-index: 120;
+  z-index: 50;
 
   .ba-dialog-container {
     display: flex;
