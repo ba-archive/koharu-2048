@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@pixi/particle-emitter": "^5.0.8",
+    "@pixi/sound": "^5.1.1",
     "gsap": "^3.11.5",
     "mitt": "^3.0.0",
-    "pixi-sound": "^3.0.5",
     "pixi-spine": "^4.0.3",
     "pixi.js": "^7.2.3",
     "vue": "^3.0.0"

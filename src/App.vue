@@ -36,9 +36,6 @@ onMounted(() => {
 
 <style>
 body {
-  background-image: url(./assets/testBg.jpg);
-  background-size: cover;
-  background-position: center;
   padding: 0;
   margin: 0;
 }
