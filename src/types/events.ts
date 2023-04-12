@@ -15,6 +15,11 @@ export type Events = {
   l2dPlay: KoharuAnimation;
 
   /**
+   * 显示一段live2d的文字
+   */
+  showLive2dText: Live2dTextConfig;
+
+  /**
    * 播放某个声音
    */
   playSound: PlaySound;
@@ -71,7 +76,7 @@ export type KoharuSound =
   // ― （先、先是那样，然后再这样，之类的……） | ― （！？难、难道说，还要做那种事情……！？）
   | "Koharu_MemorialLobby_4_1"
   | "Koharu_MemorialLobby_4_2"
-  // ― 终、终于显露出本性了吧，老师……！？ | ― （完了完了完了……！） | ― （我、[wa:600]我还[wa:350]没有做好[wa:900]任何心理准备啊！？）
+  // ― 终、终于显露出本性了吧，老师……！？ | ― （完了完了完了……！） | ― （我、我还没有做好任何心理准备啊！？）
   | "Koharu_MemorialLobby_5_1"
   | "Koharu_MemorialLobby_5_2";
 
@@ -81,3 +86,10 @@ export type PlaySound = {
   name: PlaySoundA;
   options?: PlayOptions | CompleteCallback | string;
 };
+
+export type Live2dTextConfig =
+  | KoharuSound
+  | {
+      name: string;
+      duration: number;
+    };

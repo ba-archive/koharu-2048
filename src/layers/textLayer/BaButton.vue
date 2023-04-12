@@ -88,6 +88,18 @@ onMounted(() => {
       url(./assets/UITex_BGPoliLight_1.svg) rgb(106, 224, 251);
   }
 
+  &.polyblue {
+    background: no-repeat center/contain
+        linear-gradient(
+          145deg,
+          transparent 0%,
+          rgba(118, 221, 254, 0.75) 20%,
+          rgba(118, 221, 254, 0.75) 60%,
+          transparent 100%
+        ),
+      url(./assets/UITex_BGPoliLight_1.svg) rgb(85, 205, 255);
+  }
+
   &[class*="poly"] {
     background-size: 140%;
     background-position: -15px 72%;

@@ -19,8 +19,7 @@
   <BaDialog v-model:show="showInfo" title="提示">
     <div class="ba-dialog-content">这是一些提示</div>
     <div class="ba-dialog-button-group">
-      <BaButton class="polylight">取消</BaButton>
-      <BaButton class="polylight">确定</BaButton>
+      <BaButton class="polyblue" @click="onConfirm">确定</BaButton>
     </div>
   </BaDialog>
 </template>
@@ -30,6 +29,8 @@ import { nextTick, onMounted, ref } from "vue";
 import { isMobile } from "@/layers/backgroundLayer";
 import BaDialog from "@/layers/textLayer/BaDialog.vue";
 import BaButton from "@/layers/textLayer/BaButton.vue";
+import eventBus from "@/event";
+import { KoharuSound, Live2dTextConfig } from "@/types/events";
 
 const dialogMarginRight = 10;
 const dialogMarginLeft = 10;
@@ -40,6 +41,27 @@ const dialogMaxWidth = ref(999);
 const dialogOffsetY = ref(100);
 const DialogRef = ref<HTMLElement>();
 const showInfo = ref(true);
+
+function onConfirm() {
+  eventBus.emit("playSound", { name: "back" });
+  // 让按钮动画显示完
+  setTimeout(() => {
+    showInfo.value = false;
+  }, 300);
+}
+
+function showLive2dText(config: Live2dTextConfig) {
+  new Promise<{ content: string; duration: number }>(resolve => {
+    if (typeof config === "string") {
+      // 进入live2d处理流程
+      const cfg = KoharuSoundDurationMap[config];
+      resolve(cfg);
+    } else {
+      // 进入不在live对话的处理流程, 需要自己提供duration
+      resolve({ content: config.name, duration: config.duration });
+    }
+  }).then(data => {});
+}
 
 function relocationDialog(width?: number) {
   const gameBoard = document.querySelector(
@@ -94,6 +116,48 @@ function relocationDialog(width?: number) {
 onMounted(() => {
   relocationDialog();
 });
+
+const KoharuSoundDurationMap: {
+  [key in KoharuSound]: { content: string; duration: number };
+} = {
+  Koharu_MemorialLobby_1_1: {
+    content: "干、干什么……！？",
+    duration: 800,
+  },
+  Koharu_MemorialLobby_1_2: {
+    content: "（这、这个……难道说、马上要……！？）",
+    duration: 2850,
+  },
+  Koharu_MemorialLobby_2_1: {
+    content: "我、我也没有说错什么吧！？",
+    duration: 2750,
+  },
+  Koharu_MemorialLobby_2_2: {
+    content: "（等等，难道说按照这个发展我就要，和老师……！？）",
+    duration: 2850,
+  },
+  Koharu_MemorialLobby_3: {
+    content:
+      "（这、这种发展，我在书上见过很多次……！）\n（真的、真的要变成那种剧情了吗！？）",
+    duration: 3250,
+  },
+  Koharu_MemorialLobby_4_1: {
+    content: "（先、先是那样，然后再这样，之类的……）",
+    duration: 2750,
+  },
+  Koharu_MemorialLobby_4_2: {
+    content: "（！？难、难道说，还要做那种事情……！？）",
+    duration: 3050,
+  },
+  Koharu_MemorialLobby_5_1: {
+    content: "终、终于显露出本性了吧，老师……！？",
+    duration: 2300,
+  },
+  Koharu_MemorialLobby_5_2: {
+    content: "（完了完了完了……！）\n（我、我还没有做好任何心理准备啊！？）",
+    duration: 1850,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -130,7 +194,7 @@ onMounted(() => {
     z-index: 2;
     max-width: calc(var(--max-width) * 1px);
     word-break: break-all;
-    white-space: break-spaces;
+    white-space: pre-line;
 
     &::before {
       content: "";
