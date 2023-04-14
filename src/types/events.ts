@@ -36,7 +36,7 @@ export type Events = {
   /**
    * 操作格子移动
    */
-  move: keyof typeof MoveMap;
+  move: "up" | "down" | "right" | "left";
   /**
    * 小春帮你下一步
    */
@@ -44,12 +44,12 @@ export type Events = {
   /**
    * 普拉娜帮你下一步
    */
-  puranaNext: undefined;
+  planaNext: undefined;
 
   //effect layer
   numberEffect: {
     value: number;
-    element: HTMLSpanElement;
+    element: HTMLDivElement;
   };
   click: { x: number; y: number };
   /**
