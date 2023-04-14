@@ -135,14 +135,16 @@ export const BackgroundLayer = {
     koharu.state.clearListeners();
     koharu.state.addListener({
       event(entry, event) {
-        if (event.data.name !== "Talk")
+        if (event.data.name !== "Talk") {
+          const name = event.data.name.replace(
+            "sound/",
+            ""
+          ) as unknown as KoharuSound;
           eventBus.emit("playSound", {
-            name: event.data.name as unknown as KoharuSound,
+            name: name,
           });
-        eventBus.emit(
-          "showLive2dText",
-          event.data.name as unknown as KoharuSound
-        );
+          eventBus.emit("showLive2dText", name);
+        }
       },
     });
     koharu.state.addAnimation(1, KOHARU_ANIMATION[animation], false, 0);

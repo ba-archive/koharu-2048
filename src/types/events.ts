@@ -1,6 +1,5 @@
 import { MoveMap } from "@/layers/2048Layer/board";
-import CompleteCallback = PIXI.sound.CompleteCallback;
-import PlayOptions = PIXI.sound.PlayOptions;
+import { CompleteCallback, PlayOptions } from "@pixi/sound";
 
 //以接受事件的层组织事件
 export type Events = {

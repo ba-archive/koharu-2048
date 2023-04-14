@@ -18,7 +18,7 @@
   </div>
   <BaDialog v-model:show="showHelpDialog" title="提示">
     <div class="ba-dialog-content">
-      <div>
+      <div class="text">
         <div>和小春一起做蛋糕！</div>
         <div>
           每次可以选择上下左右其中一个方向去滑动，每滑动一次，所有的方块都会往滑动的方向靠拢，同时会随机生成一个新的方块。相同方块在相撞时会叠加并合成一个新的方块。合成出蛋糕则游戏胜利。当所有格子都被填满时，游戏结束。
@@ -60,7 +60,7 @@ function onConfirm() {
   // 让按钮动画显示完
   setTimeout(() => {
     showHelpDialog.value = false;
-  }, 300);
+  }, 150);
 }
 
 function onShowLive2dText(_config: Live2dTextConfig) {
@@ -284,6 +284,11 @@ const KoharuSoundDurationMap: {
   font-size: 1.2rem;
   overflow-y: scroll;
   white-space: pre-line;
+  .text {
+    > div {
+      margin-bottom: 1rem;
+    }
+  }
 }
 
 .ba-dialog-button-group {
