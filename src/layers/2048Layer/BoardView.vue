@@ -1,165 +1,65 @@
 <template>
-  <div class="board" tabIndex="1">
-    <div v-for="(r_item, r_i) in board.cells" :key="r_i" class="cells">
-      <cell v-for="(c_item, c_i) in r_item" :key="c_i"></cell>
+  <div class="container-main">
+    <div class="game-container">
+      <div class="tile-container"></div>
     </div>
-    <tile-view v-for="(tile, i) in tiles" :tile="tile" :key="i"> </tile-view>
-    <game-end-overlay :board="board" :onrestart="onRestart"></game-end-overlay>
   </div>
 </template>
 
-<script lang="ts" setup>
-import Cell from "./components/Cell.vue";
-import TileView from "./components/TileView.vue";
-import GameEndOverlay from "./components/GameEndOverlay.vue";
-import { Board, MoveMap, setDifficulty } from "./board";
-import { onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
+<script setup lang="ts">
+import { onMounted, onBeforeUnmount } from "vue";
+import GameManager from "./js/game_manager";
+import HTMLActuator from "./js/html_actuator";
+import LocalStorageManager from "./js/local_storage_manager";
 import eventBus from "@/event";
-import { Events } from "@/types/events";
-const board = ref(new Board());
-
-const handleKeyDown: (event: KeyboardEvent) => void = event => {
-  if (board.value.hasWon()) {
-    return;
-  }
-  if (event.keyCode >= 37 && event.keyCode <= 40) {
-    event.preventDefault();
-    var direction = event.keyCode - 37;
-    board.value.move(direction);
-  }
-};
-const onRestart = () => {
-  board.value = new Board();
+const MoveMap = {
+  up: 0,
+  right: 1,
+  down: 2,
+  left: 3,
 };
 
-function cellMove(direction: Events["move"]) {
-  board.value.move(MoveMap[direction]);
+let gameManager: GameManager;
+const difficultyKey = "difficulty";
+function gameStart(difficulty: number | undefined) {
+  if (difficulty) {
+    gameManager.difficulty = difficulty;
+    localStorage.setItem(difficultyKey, difficulty.toString());
+  }
+  gameManager.restart();
+}
+function planaNext() {
+  if (!gameManager.isGameTerminated()) {
+    gameManager.botMove(2);
+  }
 }
 function koharuNext() {
   const directions = Object.values(MoveMap);
-  board.value.move(directions[Math.floor(Math.random() * directions.length)]);
+  gameManager.move(directions[Math.floor(Math.random() * directions.length)]);
 }
-function newGame(difficulty: undefined | number) {
-  if (difficulty) {
-    setDifficulty(difficulty);
-  }
-  board.value = new Board();
+function move(direction: keyof typeof MoveMap) {
+  gameManager.move(MoveMap[direction]);
 }
 onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
-  eventBus.on("move", cellMove);
+  const difficultyCache = localStorage.getItem(difficultyKey);
+  const difficulty = difficultyCache ? Number(difficultyCache) : 2;
+  gameManager = new GameManager(
+    4,
+    HTMLActuator,
+    LocalStorageManager,
+    difficulty
+  );
+  eventBus.on("gameStart", gameStart);
+  eventBus.on("planaNext", planaNext);
   eventBus.on("koharuNext", koharuNext);
-  eventBus.on("gameStart", newGame);
-  eventBus.on("puranaNext", koharuNext);
+  eventBus.on("move", move);
 });
 onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeyDown);
-  eventBus.off("move", cellMove);
+  eventBus.off("gameStart", gameStart);
+  eventBus.off("planaNext", planaNext);
   eventBus.off("koharuNext", koharuNext);
-  eventBus.off("gameStart", newGame);
-  eventBus.off("puranaNext", koharuNext);
+  eventBus.off("move", move);
 });
-const tiles = computed(() => {
-  return board.value.tiles.filter(tile => tile.value != 0);
-});
-
-watch(
-  () => board.value.hasWon(),
-  value => {
-    if (value) {
-      eventBus.emit("gameSucceed");
-    }
-  }
-);
-watch(
-  () => board.value.hasLost(),
-  value => {
-    if (value) {
-      eventBus.emit("gameFail");
-    }
-  }
-);
 </script>
 
-<style lang="scss" scoped>
-.board {
-  order: 1;
-  padding: 1%;
-  background-color: #baa;
-  border-radius: 7px;
-  outline: none;
-  position: relative;
-  .cells {
-    height: 25%;
-  }
-}
-</style>
-
-<style lang="scss">
-@function calcPosition($count) {
-  @return 24% * $count + 1% * (floor($count/2) + 1);
-}
-
-@for $row from 0 through 3 {
-  @for $column from 0 through 3 {
-    .position_#{$row}_#{$column}:not(.isMoving) {
-      top: calcPosition($row);
-      left: calcPosition(($column));
-    }
-  }
-}
-
-@for $fromRow from 0 through 3 {
-  @for $toRow from 0 through 3 {
-    $name: row_from_#{$fromRow}_to_#{$toRow};
-
-    @if $fromRow == $toRow {
-      .#{$name} {
-        top: calcPosition($toRow);
-      }
-    } @else {
-      .#{$name} {
-        animation-duration: 0.2s;
-        animation-name: $name;
-        animation-fill-mode: forwards;
-      }
-
-      @keyframes #{$name} {
-        from {
-          top: calcPosition($fromRow);
-        }
-        to {
-          top: calcPosition(($toRow));
-        }
-      }
-    }
-  }
-}
-
-@for $fromColumn from 0 through 3 {
-  @for $toColumn from 0 through 3 {
-    $name: column_from_#{$fromColumn}_to_#{$toColumn};
-
-    @if $fromColumn == $toColumn {
-      .#{$name} {
-        left: calcPosition($toColumn);
-      }
-    } @else {
-      .#{$name} {
-        animation-duration: 0.2s;
-        animation-name: $name;
-        animation-fill-mode: forwards;
-      }
-
-      @keyframes #{$name} {
-        from {
-          left: calcPosition($fromColumn);
-        }
-        to {
-          left: calcPosition($toColumn);
-        }
-      }
-    }
-  }
-}
-</style>
+<style lang="scss" src="./style/main.scss"></style>

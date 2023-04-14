@@ -1,4 +1,4 @@
-import sound from "pixi-sound";
+import { sound } from "@pixi/sound";
 import { Spine } from "pixi-spine";
 import { PlaySound } from "@/types/events";
 import eventBus from "@/event";

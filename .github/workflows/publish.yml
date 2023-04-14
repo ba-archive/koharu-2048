@@ -43,5 +43,7 @@ jobs:
           # 解压也会自动覆盖
           last_ssh: |
             cd ~
+            rm -rf ./dist
             tar -xzvf release.tgz
             cp -r ./dist/* /var/www/game/koharu
+            rm -rf ./dist
