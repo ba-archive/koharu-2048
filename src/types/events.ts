@@ -24,6 +24,11 @@ export type Events = {
    */
   playSound: PlaySound;
 
+  /**
+   * 显示帮助对话框
+   */
+  showHelpDialog: null;
+
   //2048 layer
   /**
    * 游戏开始, 参数的作用是设置难度, 随机生成的数字最小值会被设置为难度系数X2

@@ -2,7 +2,7 @@ import { Application } from "pixi.js";
 import * as PIXI from "pixi.js";
 import { Spine } from "pixi-spine";
 import { SoundLayer } from "@/layers/soundLayer";
-import { KoharuAnimation, PlaySound, PlaySoundA } from "@/types/events";
+import { KoharuAnimation, KoharuSound } from "@/types/events";
 import eventBus from "@/event";
 let app: Application | undefined;
 let koharu: Spine | undefined;
@@ -137,8 +137,12 @@ export const BackgroundLayer = {
       event(entry, event) {
         if (event.data.name !== "Talk")
           eventBus.emit("playSound", {
-            name: event.data.name as unknown as PlaySoundA,
+            name: event.data.name as unknown as KoharuSound,
           });
+        eventBus.emit(
+          "showLive2dText",
+          event.data.name as unknown as KoharuSound
+        );
       },
     });
     koharu.state.addAnimation(1, KOHARU_ANIMATION[animation], false, 0);

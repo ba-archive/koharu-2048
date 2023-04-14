@@ -13,11 +13,20 @@
       }"
       ref="DialogRef"
     >
-      <div class="bubble">这是一个气泡</div>
+      <div class="bubble">{{ bubble }}</div>
     </div>
   </div>
-  <BaDialog v-model:show="showInfo" title="提示">
-    <div class="ba-dialog-content">这是一些提示</div>
+  <BaDialog v-model:show="showHelpDialog" title="提示">
+    <div class="ba-dialog-content">
+      <div>
+        和小春一起做蛋糕！
+        每次可以选择上下左右其中一个方向去滑动，每滑动一次，所有的方块都会往滑动的方向靠拢，同时会随机生成一个新的方块。相同方块在相撞时会叠加并合成一个新的方块。合成出蛋糕则游戏胜利。当所有格子都被填满时，游戏结束。
+        合并规则如下：
+      </div>
+      <div>
+        <img src="./assets/koharu_help.webp" alt="烫烫烫" />
+      </div>
+    </div>
     <div class="ba-dialog-button-group">
       <BaButton class="polyblue" @click="onConfirm">确定</BaButton>
     </div>
@@ -25,12 +34,13 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from "vue";
+import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { isMobile } from "@/layers/backgroundLayer";
 import BaDialog from "@/layers/textLayer/BaDialog.vue";
 import BaButton from "@/layers/textLayer/BaButton.vue";
 import eventBus from "@/event";
 import { KoharuSound, Live2dTextConfig } from "@/types/events";
+import gsap from "gsap";
 
 const dialogMarginRight = 10;
 const dialogMarginLeft = 10;
@@ -40,27 +50,66 @@ const playerRank = ref(514);
 const dialogMaxWidth = ref(999);
 const dialogOffsetY = ref(100);
 const DialogRef = ref<HTMLElement>();
-const showInfo = ref(true);
-
+const showHelpDialog = ref(false);
+const bubble = ref("");
+let bubbleTimeline: gsap.core.Timeline | undefined;
 function onConfirm() {
   eventBus.emit("playSound", { name: "back" });
   // 让按钮动画显示完
   setTimeout(() => {
-    showInfo.value = false;
+    showHelpDialog.value = false;
   }, 300);
 }
 
-function showLive2dText(config: Live2dTextConfig) {
+function onShowLive2dText(_config: Live2dTextConfig) {
   new Promise<{ content: string; duration: number }>(resolve => {
-    if (typeof config === "string") {
+    if (typeof _config === "string") {
       // 进入live2d处理流程
-      const cfg = KoharuSoundDurationMap[config];
+      const cfg = KoharuSoundDurationMap[_config];
       resolve(cfg);
     } else {
       // 进入不在live对话的处理流程, 需要自己提供duration
-      resolve({ content: config.name, duration: config.duration });
+      resolve({ content: _config.name, duration: _config.duration });
     }
-  }).then(data => {});
+  }).then(data => {
+    if (bubbleTimeline) {
+      bubbleTimeline.pause();
+      bubbleTimeline.kill();
+      bubbleTimeline = undefined;
+    }
+    nextTick(() => {
+      bubble.value = data.content;
+      bubbleTimeline = gsap.timeline();
+      bubbleTimeline
+        .to(DialogRef.value!, {
+          opacity: 1,
+          duration: 0.5,
+        })
+        .to(DialogRef.value!, {
+          opacity: 0,
+          duration: 0.5,
+          delay: data.duration / 1000 + 1.5,
+        })
+        .then(() => {
+          bubble.value = "";
+        });
+    });
+  });
+}
+
+watch(
+  () => bubble.value,
+  cur => {
+    if (cur) {
+      nextTick(() => {
+        relocationDialog();
+      });
+    }
+  }
+);
+
+function onShowHelpDialog() {
+  showHelpDialog.value = true;
 }
 
 function relocationDialog(width?: number) {
@@ -113,8 +162,19 @@ function relocationDialog(width?: number) {
   });
 }
 
+function onDispose() {
+  eventBus.off("showLive2dText", onShowLive2dText);
+  eventBus.off("showHelpDialog", onShowHelpDialog);
+}
+
 onMounted(() => {
-  relocationDialog();
+  eventBus.on("showLive2dText", onShowLive2dText);
+  eventBus.on("showHelpDialog", onShowHelpDialog);
+  eventBus.on("dispose", onDispose);
+});
+
+onUnmounted(() => {
+  onDispose();
 });
 
 const KoharuSoundDurationMap: {
@@ -183,6 +243,7 @@ const KoharuSoundDurationMap: {
   top: calc(var(--offset-y) * 1px);
   left: calc(var(--offset-x) * 1px + 50%);
   z-index: -1;
+  opacity: 0;
 
   .bubble {
     $color: rgba(255, 255, 255, 0.8);
@@ -216,14 +277,15 @@ const KoharuSoundDurationMap: {
   flex: 1;
   border: solid #d1d7dc 2px;
   border-radius: 0.25em;
-  overflow-y: auto;
-  padding: 0.3125em 0.4375em;
+  padding: 1rem;
   background-color: #f0f0f0;
-  font-size: 1.2em;
+  font-size: 1.2rem;
+  overflow-y: scroll;
+  white-space: pre-line;
 }
 
 .ba-dialog-button-group {
-  margin-top: 1em;
+  margin-top: 1rem;
   text-align: center;
 }
 </style>

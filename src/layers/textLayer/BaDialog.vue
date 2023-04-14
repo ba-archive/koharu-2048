@@ -46,7 +46,11 @@ watch(
 </script>
 
 <template>
-  <div class="ba-dialog" :style="{ display: show === true ? '' : 'none' }">
+  <div
+    class="ba-dialog"
+    :style="{ display: show === true ? '' : 'none' }"
+    @click.self="handleClose"
+  >
     <div
       class="ba-dialog-container"
       :style="{ width: props.width, height: props.height }"
@@ -112,7 +116,7 @@ watch(
 
       .ba-dialog-title {
         margin: 0.2em 0.5em 0 0.5em;
-        font-size: 1.5em;
+        font-size: 1.5rem;
         font-weight: bold;
         text-align: center;
         user-select: none;
