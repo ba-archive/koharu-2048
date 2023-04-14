@@ -3,19 +3,19 @@
     <div class="player-info">
       <div class="padding">
         <div class="left-side">
-          <div class="level-text">Lv.</div>
-          <div class="player-level">{{ playerLevel }}</div>
+          <div class="level-text setFont">Lv.</div>
+          <div class="player-level setFont">{{ playerLevel }}</div>
         </div>
         <div class="right-side">
-          <div class="player-name">{{ playerName }}</div>
+          <div class="player-name setFont">{{ playerName }}</div>
           <div class="hr"></div>
-          <div class="player-rank">Rank: {{ playerRank }}</div>
+          <div class="player-rank setFont">Rank: {{ playerRank }}</div>
         </div>
       </div>
     </div>
     <div class="diamond-container">
       <div class="diamond-pic disSkew"></div>
-      <div class="diamond-number disSkew">{{ diamondNumber }}</div>
+      <div class="diamond-number disSkew setFont">{{ diamondNumber }}</div>
     </div>
   </div>
 </template>
@@ -29,6 +29,11 @@ const diamondNumber = ref(114514);
 </script>
 
 <style lang="scss" scoped>
+.setFont {
+  // 不是很清楚最后字体怎么决定了，如果决定了就把下面的改了就可以了
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .container {
   position: absolute;
   top: 0;
@@ -59,6 +64,7 @@ const diamondNumber = ref(114514);
         display: flex;
         justify-content: center;
         flex-direction: column;
+        width: 100%;
         .level-text {
           font-size: min(2.5vh, 60px);
           line-height: min(2.5vh, 60px);
@@ -66,8 +72,7 @@ const diamondNumber = ref(114514);
           display: flex;
           align-items: flex-end;
           justify-content: center;
-          margin: 5px;
-          margin-bottom: 0px;
+          margin-bottom: 2px;
         }
         .player-level {
           font-size: min(3.5vh, 80px);
@@ -77,8 +82,7 @@ const diamondNumber = ref(114514);
           display: flex;
           align-items: flex-start;
           justify-content: center;
-          margin: 5px;
-          margin-top: 0px;
+          margin-top: 2px;
         }
       }
 
@@ -90,6 +94,7 @@ const diamondNumber = ref(114514);
         flex-direction: column;
         transform: skewX(10deg);
         font-size: min(2.5vh, 40px);
+        width: 100%;
         .player-name {
           color: #fff;
           display: flex;
@@ -100,7 +105,6 @@ const diamondNumber = ref(114514);
           width: 85%;
           height: 4px;
           background-color: #fcee2c;
-          margin: 5px 0px 5px 0px;
         }
         .player-rank {
           font-weight: 1000;
