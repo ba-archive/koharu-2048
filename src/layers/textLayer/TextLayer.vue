@@ -67,12 +67,11 @@ const diamondNumber = ref(114514);
         width: 100%;
         .level-text {
           font-size: min(2.5vh, 60px);
-          line-height: min(2.5vh, 60px);
+          line-height: min(3.5vh, 80px);
           color: #fbd729;
           display: flex;
           align-items: flex-end;
           justify-content: center;
-          margin-bottom: 2px;
         }
         .player-level {
           font-size: min(3.5vh, 80px);
@@ -82,7 +81,6 @@ const diamondNumber = ref(114514);
           display: flex;
           align-items: flex-start;
           justify-content: center;
-          margin-top: 2px;
         }
       }
 
