@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="action-button-group">
-        <div class="action-button" @click="showHelpDialog = true">
+        <div class="action-button" @click="handleHelp" ref="HelpButtonRef">
           <div class="action-button-pic help-pic">
             <svg
               width="18"
@@ -39,7 +39,11 @@
         </div>
       </div>
       <div class="action-button-group">
-        <div class="action-button" @click="handlePlanaNext">
+        <div
+          class="action-button"
+          @click="handlePlanaNext"
+          ref="PlanaButtonRef"
+        >
           <div class="action-button-pic help-pic">
             <svg
               width="18"
@@ -69,7 +73,12 @@
       <div class="bubble">{{ bubble }}</div>
     </div>
   </div>
-  <BaDialog v-model:show="showHelpDialog" title="提示" height="500px" width="390px">
+  <BaDialog
+    v-model:show="showHelpDialog"
+    title="提示"
+    height="500px"
+    width="390px"
+  >
     <div class="ba-dialog-content">
       <div class="text">
         <div>和小春一起做蛋糕！</div>
@@ -104,6 +113,7 @@ import gsap from "gsap";
 import { clientIsMobile } from "@/utils";
 import event from "@/event";
 import GameOverScreen from "@/layers/textLayer/assets/GameOverScreen.vue";
+import { buttonAnimation } from "@/layers/textLayer/utils";
 
 const dialogMarginRight = 10;
 const dialogMarginLeft = 10;
@@ -113,9 +123,10 @@ const dialogOffsetY = ref(100);
 const DialogRef = ref<HTMLElement>();
 const showHelpDialog = ref(false);
 const bubble = ref("");
+const HelpButtonRef = ref<HTMLElement>();
+const PlanaButtonRef = ref<HTMLElement>();
 let bubbleTimeline: gsap.core.Timeline | undefined;
 function onConfirm() {
-  eventBus.emit("playSound", { name: "back" });
   // 让按钮动画显示完
   setTimeout(() => {
     showHelpDialog.value = false;
@@ -232,6 +243,8 @@ onMounted(() => {
   eventBus.on("showLive2dText", onShowLive2dText);
   eventBus.on("showHelpDialog", onShowHelpDialog);
   eventBus.on("dispose", onDispose);
+  buttonAnimation({ elem: PlanaButtonRef.value });
+  buttonAnimation({ elem: HelpButtonRef.value });
 });
 
 onUnmounted(() => {
@@ -334,6 +347,12 @@ eventBus.on("gameSucceed", () => {
 function handlePlanaNext() {
   recordPlanaNext();
   eventBus.emit("planaNext");
+  eventBus.emit("playSound", { name: "click" });
+}
+
+function handleHelp() {
+  showHelpDialog.value = true;
+  eventBus.emit("playSound", { name: "click" });
 }
 
 const showGameOverScreen = ref(false);
